@@ -82,6 +82,10 @@ Un workspace ROS 2 typique comprend les éléments suivants :
    cd ..
    tree -d -L 1 ros_tutorial_ws/
    ```
+   Si la commande tree n'est définie, exécutez la commande suivante:
+   ```bash
+   apt install tree
+   ```
    **Résultat attendu :**  
    ```
    ros_tutorial_ws/
@@ -118,10 +122,6 @@ Un workspace ROS 2 typique comprend les éléments suivants :
 3. **Vérifier la structure du package :**  
    ```bash
    tree turtle_controller/
-   ```
-   Si la commande tree n'est définie, exécutez la commande suivante:
-   ```bash
-   apt install tree
    ```
    **Résultat attendu :**  
    ```
