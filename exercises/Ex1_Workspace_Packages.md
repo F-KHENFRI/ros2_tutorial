@@ -15,8 +15,8 @@
 
 ## Objectifs
 
-- Créer un **workspace** ROS 2 pour un projet robotique.
-- Créer des **packages** pour un robot mobile.
+- Créer un **workspace** ROS 2.
+- Créer des **packages**.
 
 ---
 
@@ -40,6 +40,14 @@
    Ajoutez le support pour l'autocomplétion de `colcon` avec cette commande :
    ```bash
    source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
+   ```
+   Pour automatiser cette étape, ajoutez cette commande à la fin de votre fichier **~/.bashrc**. Utilisez la commande suivante :
+   ```bash
+   echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
+   ```
+   Ensuite, rechargez le fichier **~/.bashrc** :
+   ```bash
+   source ~/.bashrc
    ```
 
 ---
@@ -86,7 +94,7 @@ Un workspace ROS 2 typique comprend les éléments suivants :
 4. **Sourcez le workspace automatiquement :**  
    Ajoutez cette ligne à la fin de votre fichier **~/.bashrc** :  
    ```bash
-   echo "source ~/ros_tutorial_ws/install/setup.bash" >> ~/.bashrc
+   echo "source /workspaces/ros2_tutorial/ros_tutorial_ws/install/setup.bash" >> ~/.bashrc
    ```
    Rechargez le fichier **~/.bashrc** pour appliquer les modifications immédiatement :  
    ```bash
@@ -99,7 +107,7 @@ Un workspace ROS 2 typique comprend les éléments suivants :
 
 1. **Se déplacer dans le dossier `src/` du workspace :**  
    ```bash
-   cd ~/ros_tutorial_ws/src/
+   cd ros_tutorial_ws/src/
    ```
 
 2. **Créer un package ROS 2 nommé `turtle_controller` :**  
@@ -110,6 +118,10 @@ Un workspace ROS 2 typique comprend les éléments suivants :
 3. **Vérifier la structure du package :**  
    ```bash
    tree turtle_controller/
+   ```
+   Si la commande tree n'est définie, exécutez la commande suivante:
+   ```bash
+   apt install tree
    ```
    **Résultat attendu :**  
    ```
@@ -129,13 +141,13 @@ Un workspace ROS 2 typique comprend les éléments suivants :
 
 4. **Recompiler le workspace :**  
    ```bash
-   cd ~/ros_tutorial_ws
+   cd ..
    colcon build
    ```
 
 5. **Sourcez le workspace :**  
    ```bash
-   source ~/ros_tutorial_ws/install/setup.bash
+   source ~/.bashrc
    ```
 
 ---
