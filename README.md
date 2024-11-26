@@ -1,17 +1,13 @@
-Voici une version corrigée et améliorée de votre texte pour qu’il soit plus clair, professionnel et structuré :
+# ROS 2 Tutorial
 
----
-
-# ROS 2 Course
-
-Bienvenue dans le cours **ROS 2** ! Ce dépôt contient tout le matériel nécessaire pour suivre les cours, réaliser les exercices, et configurer votre environnement de développement.
+Bienvenue dans ce tutorial **ROS 2** ! Ce dépôt contient tout les informations nécessaires pour réaliser un projet sous ROS 2.
 
 ---
 
 ## Objectifs du cours
 
 - **Apprendre les bases de ROS 2** : exploration des nœuds, des topics et des messages.
-- **Comprendre les concepts avancés** : gestion des services, actions, et communications distribuées.
+- **Comprendre les concepts avancés** : gestion des services, actions, et paramètres.
 - **Développer un projet final** : mise en œuvre d'une navigation autonome.
 
 ---
