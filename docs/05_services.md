@@ -1,4 +1,21 @@
 # **Concept des Services dans ROS 2**
+## **Sommaire**
+- [**Concept des Services dans ROS 2**](#concept-des-services-dans-ros-2)
+  - [**Sommaire**](#sommaire)
+  - [**Qu’est-ce qu’un Service dans ROS 2 ?**](#quest-ce-quun-service-dans-ros-2-)
+    - [**Caractéristiques des Services :**](#caractéristiques-des-services-)
+  - [**Structure d’un Service**](#structure-dun-service)
+    - [**Exemple d’un fichier `.srv` :**](#exemple-dun-fichier-srv-)
+  - [**Utilisation des Services dans un Nœud ROS 2**](#utilisation-des-services-dans-un-nœud-ros-2)
+    - [**1. Implémenter un Serveur de Service**](#1-implémenter-un-serveur-de-service)
+      - [Exemple de Serveur :](#exemple-de-serveur-)
+    - [**2. Implémenter un Client de Service**](#2-implémenter-un-client-de-service)
+      - [Exemple de Client :](#exemple-de-client-)
+  - [**Utilisation des Services avec la CLI**](#utilisation-des-services-avec-la-cli)
+    - [**Commandes CLI principales :**](#commandes-cli-principales-)
+  - [**Exercice : Modifier les coordonnées cibles dans le nœud `pid_regulator` via un Service**](#exercice--modifier-les-coordonnées-cibles-dans-le-nœud-pid_regulator-via-un-service)
+    - [**Objectif**](#objectif)
+    - [**Instructions**](#instructions)
 
 ---
 
@@ -90,34 +107,35 @@ from example_interfaces.srv import SetBool
 class ClientNode(Node):
     def __init__(self):
         super().__init__('client_node')
-
-        # Créer le client de service
         self.client = self.create_client(SetBool, 'toggle_service')
-
         while not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
+        self.get_logger().info('Service available. Sending request...')
+        self.send_request(data=True)
 
-        # Créer une requête
-        self.request = SetBool.Request()
-        self.request.data = True  # Modifier le champ de la requête
+    def send_request(self, data):
+        request = TeleportAbsolute.Request()
+        request.data = data
+        future = self.client.call_async(request)
+        future.add_done_callback(self.response_callback)
 
-        # Envoyer la requête et traiter la réponse
-        self.future = self.client.call_async(self.request)
-        rclpy.spin_until_future_complete(self, self.future)
-        if self.future.result() is not None:
-            self.get_logger().info(f"Response: {self.future.result().message}")
-        else:
-            self.get_logger().info("Service call failed!")
+    def response_callback(self, future):
+        try:
+            response = future.result()
+            self.get_logger().info(f"Response: success = {response.success}")
+        except Exception as e:
+            self.get_logger().error(f"Service call failed: {e}")
 
 def main(args=None):
     rclpy.init(args=args)
     node = ClientNode()
+    rclpy.spin(node)
     rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
-```
 
+```
 ---
 
 ## **Utilisation des Services avec la CLI**
@@ -158,28 +176,22 @@ ROS 2 propose des commandes pour interagir avec les services disponibles.
 ## **Exercice : Modifier les coordonnées cibles dans le nœud `pid_regulator` via un Service**
 
 ### **Objectif**
-Ajouter un service dans le nœud `pid_regulator` pour permettre la modification des coordonnées cibles (**x**, **y**) et de l’angle **θ** via une requête.
+Ajouter un service dans le nœud `pid_regulator` pour permettre la modification des coordonnées cibles (**x**, **y**) et de l’angle **θ** via une requête. 
 
 ### **Instructions**
-1. **Créer un service :**
-   - Définissez un service nommé `SetTarget` avec les champs suivants dans la requête :
-     - `float64 x` : Coordonnée cible en X.
-     - `float64 y` : Coordonnée cible en Y.
-     - `float64 theta` : Angle cible.
-   - Dans la réponse :
-     - `bool success` : Indique si l’opération a réussi.
-     - `string message` : Retourne un message d’état.
-
-2. **Ajoutez un serveur de service dans `pid_regulator` :**
-   - Créez le serveur de service pour gérer les requêtes entrantes.
-   - Mettez à jour les cibles **x**, **y**, et **θ** lorsque la requête est reçue.
+1. **Ajoutez un serveur de service dans `pid_regulator` :**
+   - Créez le serveur `/turtle1/set_target_pose`de service pour gérer les requêtes entrantes avec l'interface service  `turtlesim/srv/TeleportAbsolute`.
+   - Mettez à jour les cibles **x_d**, **y_d**, et **θ_d** lorsque la requête est reçue.
 
 3. **Testez le service avec la CLI :**
    - Appelez le service avec différentes coordonnées et observez les résultats dans le comportement de la tortue.
 
    Exemple d’appel CLI :
    ```bash
-   ros2 service call /set_target your_package/srv/SetTarget "{x: 5.0, y: 5.0, theta: 1.57}"
+   ros2 service call /turtle1/set_target_pose turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 8.0, theta: 1.57}"
    ```
-
+4. **Ajoutez le nœud client `turtle_navigation` :**  
+   - Créez un nouveau nœud client nommé `turtle_navigation`, qui effectue la planification de trajectoire et envoie des requêtes au nœud `pid_regulator`.  
+   - Testez d'abord avec une seule requête, puis avec une série de requêtes où la suivante est envoyée uniquement lorsque la précédente a été correctement exécutée.
+   - Que remarquez-vous, et quelle solution proposez-vous ?
 ---

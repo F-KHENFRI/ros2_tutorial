@@ -13,6 +13,7 @@
 		"DISPLAY=host.docker.internal:0.0",
 		"--volume",
 		"/tmp/.X11-unix:/tmp/.X11-unix:rw",
+		"--device=/dev/video0:/dev/video0",
 		"--privileged"
 	]
 	// Features to add to the dev container. More info: https://containers.dev/features.
