@@ -6,6 +6,7 @@ Dans ROS2 (Robot Operating System 2), les **nœuds** sont des processus indépen
 
 ## Sommaire
 
+
 - [Les Nœuds dans ROS2](#les-nœuds-dans-ros2)
   - [Sommaire](#sommaire)
   - [1. Introduction aux Nœuds ROS2](#1-introduction-aux-nœuds-ros2)
@@ -21,7 +22,9 @@ Dans ROS2 (Robot Operating System 2), les **nœuds** sont des processus indépen
     - [Étape 7 : Exécuter le Nœud](#étape-7--exécuter-le-nœud)
   - [4. Bonnes Pratiques pour les Nœuds ROS2](#4-bonnes-pratiques-pour-les-nœuds-ros2)
   - [5. Commandes Utiles](#5-commandes-utiles)
-  - [6. Conclusion](#6-conclusion)
+  - [Exercice : Créez un nœud `pid_regulator`](#exercice--créez-un-nœud-pid_regulator)
+    - [Objectif](#objectif)
+    - [Instructions](#instructions)
 
 ---
 
@@ -93,7 +96,7 @@ Modifiez le fichier `setup.py` pour enregistrer le nœud :
 ```python
 entry_points={
     'console_scripts': [
-        'simple_node = <nom_du_package>.simple_node:main',
+        '<nom_de_votre_node> = <nom_du_package>.<nom_fichier_py>:main',
     ],
 },
 ```
@@ -102,15 +105,8 @@ entry_points={
 ```bash
 colcon build --symlink-install
 ```
-Si `colcon` n'est pas défini, exécutez cette commande :
-```bash
-apt-get update && apt-get install -y python3-colcon-common-extensions
-```
-**"Pour activer l'autocomplétion de `colcon`, ajoutez `colcon-argcomplete.bash` dans le fichier `~/.bashrc`."**
-```bash
-echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc 
-source ~/.bashrc
-```
+L'option --symlink-install dans la commande colcon build est utilisée pour optimiser le processus de développement dans les workspaces ROS 2. Elle permet de créer des liens symboliques (symlinks) vers les fichiers d'installation, plutôt que de copier ces fichiers dans le répertoire install.
+**Pas besoin de reconstruire le workspace après chaque modification dans les fichiers source.**
 ### Étape 6 : Sourcer le workspace 
 ```bash
 source install/setup.bash
@@ -118,7 +114,7 @@ source install/setup.bash
 
 ### Étape 7 : Exécuter le Nœud
 ```bash
-ros2 run <nom_du_package> simple_node
+ros2 run <nom_du_package> <nom_de_votre_node>
 ```
 
 ---
@@ -147,7 +143,39 @@ ros2 run <nom_du_package> simple_node
 
 ---
 
-## 6. Conclusion
+## Exercice : Créez un nœud `pid_regulator`
 
-Les nœuds sont essentiels à toute application ROS2. Ils permettent une communication décentralisée et modulaire entre différents composants du système. En comprenant comment créer et enrichir les nœuds, vous pouvez concevoir des systèmes robotiques robustes et flexibles.
+### Objectif
+Créer un nœud simple nommé `pid_regulator` dans le package `turtle_controller` situé dans le workspace `turtle_ws`. Ce nœud affichera uniquement un message dans la console indiquant qu'il a été correctement créé.
 
+### Instructions
+
+1. Assurez-vous d’avoir un workspace nommé `turtle_ws` contenant un package appelé `turtle_controller`. Si ce n’est pas encore fait, suivez les étapes précédentes pour créer un workspace et un package.
+
+2. Naviguez dans le répertoire `src` du workspace `turtle_ws` :
+   ```bash
+   cd ~/turtle_ws/src/turtle_controller
+   ```
+
+3. Implémentez un nœud nommé `pid_regulator` dans ce package :
+   - créez un fichier Python dans le dossier `turtle_controller` avec le contenu approprié pour un nœud ROS 2.
+
+4. Le nœud doit afficher un simple message comme :
+   ```
+   [INFO] [pid_regulator]: Node pid_regulator has been created successfully!
+   ```
+
+5. Modifiez les fichiers nécessaires pour inclure ce nœud :
+   - Mettez à jour le fichier `package.xml` si des dépendances supplémentaires sont nécessaires.
+   - Mettez à jour le fichier  `setup.py` pour inclure ce nœud.
+
+6. Compilez de nouveau le workspace pour inclure le nœud `pid_regulator` :
+   ```bash
+   cd ~/turtle_ws
+   colcon build
+   ```
+
+7. Lancez le nœud avec la commande :
+   ```bash
+   ros2 run turtle_controller pid_regulator
+   ```
