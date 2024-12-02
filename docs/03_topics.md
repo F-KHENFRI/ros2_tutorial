@@ -15,14 +15,12 @@ Les **topics** sont un concept central dans ROS2 pour permettre aux nœuds de co
   - [3. Créer un Subscriber pour un Topic](#3-créer-un-subscriber-pour-un-topic)
     - [Code : Subscriber Simple](#code--subscriber-simple)
     - [Explication des Arguments de `create_subscription`](#explication-des-arguments-de-create_subscription)
-  - [4. Lister et Inspecter les Topics](#4-lister-et-inspecter-les-topics)
-  - [5. Commandes Utiles pour les Topics](#5-commandes-utiles-pour-les-topics)
-    - [Écouter les Messages](#écouter-les-messages)
-    - [Publier un Message](#publier-un-message)
-    - [Inspecter la Fréquence des Messages](#inspecter-la-fréquence-des-messages)
-  - [6. Exemples de Communication](#6-exemples-de-communication)
-  - [7. Meilleures Pratiques](#7-meilleures-pratiques)
-  - [9. Conclusion](#9-conclusion)
+  - [4. Commandes Utiles pour les Topics](#4-commandes-utiles-pour-les-topics)
+  - [5. Meilleures Pratiques](#5-meilleures-pratiques)
+  - [Exercice : Complétez le nœud `pid_regulator` pour contrôler la tortue avec un régulateur PID](#exercice--complétez-le-nœud-pid_regulator-pour-contrôler-la-tortue-avec-un-régulateur-pid)
+      - [Objectif](#objectif)
+      - [Instructions](#instructions)
+      - [Résultat attendu](#résultat-attendu)
 
 ---
 
@@ -90,7 +88,7 @@ self.create_publisher(message_type, topic_name, qos)
 
 - **`topic_name`** : Le nom du topic sur lequel le message sera publié. Assurez-vous qu'il est unique et descriptif, comme `/robot/cmd_vel`.
 
-- **`qos`** : Le profil de qualité de service (QoS). Nous explorerons cette notion plus loin.
+- **`qos`** : Le profil de qualité de service (QoS) ou la taille de la file d'attente.
 
 ---
 
@@ -144,91 +142,87 @@ self.create_subscription(message_type, topic_name, callback, qos)
 
 - **`callback`** : Une fonction appelée chaque fois qu'un message est reçu. Elle doit prendre un seul argument, le message reçu.
 
-- **`qos`** : Le profil de qualité de service, qui contrôle la fiabilité et les délais des messages.
+- **`qos`** : Le profil de qualité de service, qui contrôle la fiabilité et les délais des messages ou la taille de la file d'attente.
 
 ---
 
-## 4. Lister et Inspecter les Topics
-
-- **Lister tous les topics actifs :**
+## 4. Commandes Utiles pour les Topics
+- Lister tous les topics actifs :
   ```bash
   ros2 topic list
   ```
 
-- **Afficher le type de message utilisé par un topic :**
+- Afficher le type de message utilisé par un topic :
   ```bash
   ros2 topic type /chatter
   ```
-
-- **Écouter les messages publiés sur un topic :**
+- Écouter les Messages :
   ```bash
-  ros2 topic echo /chatter
+  ros2 topic echo /nom_du_topic
   ```
 
-- **Publier un message manuel sur un topic :**
+- Publier un Message :
   ```bash
-  ros2 topic pub /chatter std_msgs/String '{data: "Hello ROS2"}'
+  ros2 topic pub /nom_du_topic std_msgs/String '{data: "Hello ROS2"}'
   ```
 
+- Inspecter la Fréquence des Messages :
+  ```bash
+  ros2 topic hz /nom_du_topic
+  ```
 ---
 
-## 5. Commandes Utiles pour les Topics
+## 5. Meilleures Pratiques
 
-### Écouter les Messages
-```bash
-ros2 topic echo /nom_du_topic
-```
+1. Nommez vos topics de manière descriptive :
+  Préfixez les noms des topics pour mieux organiser le système. Par exemple : `/robot/cmd_vel`.
 
-### Publier un Message
-```bash
-ros2 topic pub /nom_du_topic std_msgs/String '{data: "Hello ROS2"}'
-```
+1. Optimisez la fréquence de publication :
+Évitez de publier trop fréquemment, sauf si nécessaire.
 
-### Inspecter la Fréquence des Messages
-```bash
-ros2 topic hz /nom_du_topic
-```
-
----
-
-## 6. Exemples de Communication
-
-1. **Lancer un Publisher :**
-   ```bash
-   ros2 run my_package publisher_node
-   ```
-2. **Lancer un Subscriber :**
-   ```bash
-   ros2 run my_package subscriber_node
-   ```
-3. **Observez les messages avec `echo` :**
-   ```bash
-   ros2 topic echo /chatter
-   ```
+1. Testez avec `ros2 topic` :
+  Avant de connecter les nœuds, utilisez les commandes ROS2 pour vérifier les messages publiés.
 
 ---
 
-## 7. Meilleures Pratiques
+## Exercice : Complétez le nœud `pid_regulator` pour contrôler la tortue avec un régulateur PID
 
-1. **Nommez vos topics de manière descriptive :**
-   - Préfixez les noms des topics pour mieux organiser le système. Par exemple : `/robot/cmd_vel`.
-
-2. **Optimisez la fréquence de publication :**
-   - Évitez de publier trop fréquemment, sauf si nécessaire.
-
-3. **Testez avec `ros2 topic` :**
-   - Avant de connecter les nœuds, utilisez les commandes ROS2 pour vérifier les messages publiés.
+#### Objectif
+Étendre la fonctionnalité du nœud `pid_regulator` pour qu’il puisse contrôler la tortue dans le simulateur **Turtlesim** en utilisant un régulateur PID. Le nœud doit ajuster dynamiquement la vitesse linéaire de la tortue pour qu’elle atteigne une position cible spécifiée.
 
 ---
 
-## 9. Conclusion
+#### Instructions
 
-Les **topics** sont un outil puissant pour structurer la communication dans ROS2. Ils permettent un échange de données asynchrone et flexible, essentiel pour la conception de systèmes robotiques modulaires. Avec une configuration bien pensée des **arguments** (comme le type de message et les profils QoS pour des applications avancées) et en suivant des pratiques optimales, les topics peuvent être adaptés à une grande variété de scénarios, des flux de données en temps réel aux commandes critiques.
+1. **Configurer le nœud `pid_regulator` :**
+   - Modifiez le nœud `pid_regulator` pour souscrire au topic `/turtle1/pose`, qui publie la position actuelle de la tortue.
+   - Publiez des commandes de vitesse linéaire et angulaire sur le topic `/turtle1/cmd_vel` pour contrôler la tortue.
 
-Les topics offrent :
-- Une flexibilité pour connecter plusieurs nœuds à travers des **Publishers** et **Subscribers**.
-- Des options avancées comme la **Qualité de Service (QoS)** pour répondre aux besoins spécifiques des applications.
-- Une facilité de test et de diagnostic grâce aux commandes de ROS2.
+2. **Implémenter le régulateur PID :**
+   - Implémentez un régulateur PID pour ajuster la vitesse linéaire et angulaire de la tortue afin de minimiser l’erreur entre sa position actuelle et la position cible.
+   - Paramètres du régulateur PID :
+     - **Kp** : Gain proportionnel.
+     - **Ki** : Gain intégral.
+     - **Kd** : Gain dérivé.
 
-En maîtrisant les concepts et outils associés aux topics, vous pouvez concevoir des systèmes robustes et évolutifs pour répondre aux besoins complexes de vos projets robotiques. Que ce soit pour collecter des données capteurs, envoyer des commandes à des robots ou coordonner plusieurs composants, les topics sont la pierre angulaire d'une communication efficace dans ROS2.
+3. **Gérer la logique de contrôle :**
+   - Calculez l'erreur entre la position actuelle et la position cible et l'angle actuelle et l'angle cible.
+   - Appliquez le régulateur PID pour ajuster la commande de vitesse linéaire et angulaire.
+
+4. **Tester le nœud :**
+   - Lancez le simulateur Turtlesim :
+     ```bash
+     ros2 run turtlesim turtlesim_node
+     ```
+   - Exécutez le nœud `pid_regulator` :
+     ```bash
+     ros2 run turtle_controller pid_regulator
+     ```
+
+---
+
+#### Résultat attendu
+La tortue doit se déplacer vers la position cible spécifiée, avec une vitesse contrôlée par le régulateur PID. Les performances du régulateur doivent varier selon les gains configurés pour **Kp**, **Ki**, et **Kd**.
+
+
 
