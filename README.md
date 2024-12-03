@@ -28,8 +28,7 @@ Bienvenue dans ce tutorial **ROS 2** ! Ce dépôt contient tout les informations
 
 ## Structure du dépôt
 
-- 📂 **`docs/`** : Documentation détaillée du cours.
-- 📂 **`exercises/`** : Exercices pratiques pour chaque séance.
+- 📂 **`docs/`** : Documentation détaillée du cours avec des exercices.
 - 📂 **`docker/`** : Fichiers de configuration Docker pour ROS 2.
 - 📂 **`.devcontainer/`** : Configurations pour Visual Studio Code.
 
