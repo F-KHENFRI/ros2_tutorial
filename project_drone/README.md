@@ -30,7 +30,7 @@ Un système fonctionnel permettant de contrôler le drone Tello via ROS, en tira
 
 ##  **Technologies utilisées :**  
 - Langage : Python (pour DJITelloPy et ROS bindings)
-- Environnement : ROS2, Ubuntu
+- Environnement : Docker, ROS2, Ubuntu
 - Outils de développement : VSCode et simulateur Unity Tello téléchargabe avec le lien suivant https://github.com/PYBrulin/UAV-Tello-Simulator
   
 ## **Livrables :**  
