@@ -10,7 +10,7 @@ L’objectif principal de ce projet est de développer un pont (bridge) ROS perm
 
 1. **Recherche et Analyse :**  
    - Étudier les capacités et limitations du drone Tello (voir le [SDK 2.0 User Guide](https://dl-cdn.ryzerobotics.com/downloads/Tello/Tello%20SDK%202.0%20User%20Guide.pdf)).
-   - Comprendre l’architecture et les fonctionnalités de DJITelloPy (voir [DJITelloPy](https://github.com/PYBrulin/DJITelloPy). Cette branche a été modifiée par (Pierre-Yves)[https://github.com/PYBrulin] pour fonctionner avec le simulateur).
+   - Comprendre l’architecture et les fonctionnalités de DJITelloPy (voir [DJITelloPy](https://github.com/PYBrulin/DJITelloPy). Cette branche a été modifiée par [Pierre-Yves](https://github.com/PYBrulin) pour fonctionner avec le simulateur).
 
 2. **Développement du Pont ROS :**  
    - Créer des nœuds ROS pour piloter le drone (décollage, atterrissage, navigation, etc.).
